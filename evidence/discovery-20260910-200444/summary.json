@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260910-200444",
+  "started_at": "2026-09-11T00:04:44.670728+00:00",
+  "finished_at": "2026-09-11T00:04:45.159254+00:00",
+  "duration_s": 0.49,
+  "events": 7,
+  "kind": "discovery",
+  "goal": "Look up member 1***5 and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "stub",
+  "stop_reason": "success",
+  "outcome": "success",
+  "steps": 4,
+  "iterations": 5,
+  "note": "",
+  "artifact": "artifacts/dryrun_lookup_member_balance.json",
+  "fallbacks_promoted": 0,
+  "token_usage": {
+    "requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "estimated_cost_usd": null
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260911-140922",
+  "started_at": "2026-09-11T18:09:22.244116+00:00",
+  "finished_at": "2026-09-11T18:09:35.623105+00:00",
+  "duration_s": 13.38,
+  "events": 7,
+  "kind": "discovery",
+  "goal": "Look up the member given as input and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "claude-haiku-4-5",
+  "stop_reason": "dead_end",
+  "outcome": "failed",
+  "steps": 4,
+  "iterations": 5,
+  "note": "the recorded flow did not satisfy the artifact schema: 1 validation error for Artifact\n  Value error, step 3's fallback 2 locator targets what looks like a currency amount rather than a stable element. Target the element by its label, its heading, or its position -- not by the value it happens to display. (value withheld from this message on purpose) [type=value_error, input_value={'capability_id': 'look_u...datetime.timezone.utc))}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.**/v/value_error",
+  "artifact": null,
+  "fallbacks_promoted": 0,
+  "token_usage": {
+    "requests": 5,
+    "input_tokens": 8315,
+    "output_tokens": 837,
+    "estimated_cost_usd": 0.0125
+  }
+}

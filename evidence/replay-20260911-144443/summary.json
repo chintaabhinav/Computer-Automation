@@ -1,0 +1,13 @@
+{
+  "run_id": "replay-20260911-144443",
+  "started_at": "2026-09-11T18:44:43.181416+00:00",
+  "finished_at": "2026-09-11T18:44:43.871670+00:00",
+  "duration_s": 0.69,
+  "events": 5,
+  "kind": "replay",
+  "status": "hard_failure",
+  "outcome": null,
+  "outputs": [],
+  "steps_executed": 1,
+  "recoveries": 0
+}

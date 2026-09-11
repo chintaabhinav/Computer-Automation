@@ -1,0 +1,15 @@
+{
+  "run_id": "replay-20260911-144425",
+  "started_at": "2026-09-11T18:44:25.161028+00:00",
+  "finished_at": "2026-09-11T18:44:26.017527+00:00",
+  "duration_s": 0.856,
+  "events": 6,
+  "kind": "replay",
+  "status": "success",
+  "outcome": "success",
+  "outputs": [
+    "current_savings_balance"
+  ],
+  "steps_executed": 4,
+  "recoveries": 0
+}

@@ -1,0 +1,7 @@
+flask==3.1.2
+playwright
+anthropic
+pydantic
+python-dotenv
+pytest
+pyyaml

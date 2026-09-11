@@ -1,0 +1,13 @@
+{
+  "run_id": "replay-20260911-144426",
+  "started_at": "2026-09-11T18:44:26.171628+00:00",
+  "finished_at": "2026-09-11T18:44:26.476646+00:00",
+  "duration_s": 0.305,
+  "events": 7,
+  "kind": "replay",
+  "status": "business_outcome",
+  "outcome": "no_such_member",
+  "outputs": [],
+  "steps_executed": 3,
+  "recoveries": 0
+}

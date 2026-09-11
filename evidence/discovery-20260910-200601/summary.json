@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260910-200601",
+  "started_at": "2026-09-11T00:06:01.036826+00:00",
+  "finished_at": "2026-09-11T00:06:05.985252+00:00",
+  "duration_s": 4.95,
+  "events": 5,
+  "kind": "discovery",
+  "goal": "Look up member 1***5 and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "claude-haiku-4-5",
+  "stop_reason": "dead_end",
+  "outcome": "failed",
+  "steps": 0,
+  "iterations": 1,
+  "note": "model reported it was stuck",
+  "artifact": null,
+  "fallbacks_promoted": 0,
+  "token_usage": {
+    "requests": 2,
+    "input_tokens": 1520,
+    "output_tokens": 340,
+    "estimated_cost_usd": 0.00322
+  }
+}

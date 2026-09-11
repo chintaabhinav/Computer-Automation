@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260911-135047",
+  "started_at": "2026-09-11T17:50:47.140166+00:00",
+  "finished_at": "2026-09-11T17:51:02.142258+00:00",
+  "duration_s": 15.0,
+  "events": 8,
+  "kind": "discovery",
+  "goal": "Look up the member given as input and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "claude-haiku-4-5",
+  "stop_reason": "success",
+  "outcome": "success",
+  "steps": 5,
+  "iterations": 6,
+  "note": "",
+  "artifact": "artifacts/lookup_member_balance.json",
+  "fallbacks_promoted": 0,
+  "token_usage": {
+    "requests": 6,
+    "input_tokens": 8569,
+    "output_tokens": 1002,
+    "estimated_cost_usd": 0.013579
+  }
+}

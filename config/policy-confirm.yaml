@@ -1,0 +1,21 @@
+# Same allowlist as config/policy.yaml, but risky actions are routed to a human instead of
+# refused outright. Use with --operator cli to be asked, in a terminal, before the automation
+# does anything with a side effect on the target system.
+#
+#   python cli.py replay --artifact artifacts/open_sub_account.json --input member_id=12345 \
+#       --policy config/policy-confirm.yaml --operator cli --headed
+#
+# With --operator none this still fails closed: CONFIRM with nobody to ask is a denial.
+allowed_url_patterns:
+  - "re:^http://(localhost|127\\.0\\.0\\.1):5001([/?][^\\s]*)?$"
+
+allowed_actions:
+  - navigate
+  - click
+  - type
+  - read
+  - wait
+  - dismiss
+
+risky_action_mode: confirm
+require_confirmation_for: []

@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "version": "1.0",
+  "capability_id": "look_up_the_member_given_as_input_and_read_their",
+  "description": "Look up the member given as input and read their current savings balance",
+  "target": {
+    "app_id": "localhost",
+    "entry_url": "http://localhost:5001",
+    "surface_type": "legacy_web",
+    "tenant_id": null,
+    "app_version": null
+  },
+  "inputs": [
+    {
+      "name": "member_id",
+      "type": "string",
+      "required": true,
+      "description": "Bound into steps that reference {{member_id}}."
+    }
+  ],
+  "outputs": {
+    "outcome_values": [
+      "success",
+      "no_such_member"
+    ],
+    "fields": [
+      {
+        "name": "savings_balance",
+        "type": "string",
+        "sensitive": false,
+        "description": "Read from the page during discovery as 'savings_balance'."
+      }
+    ]
+  },
+  "steps": [
+    {
+      "index": 0,
+      "action": "navigate",
+      "target": null,
+      "value": "http://localhost:5001",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "text_equals",
+        "value": "Member Inquiry",
+        "children": null
+      },
+      "on_error": []
+    },
+    {
+      "index": 1,
+      "action": "type",
+      "target": {
+        "primary": {
+          "by": "label",
+          "value": "Member ID"
+        },
+        "fallbacks": [
+          {
+            "by": "css",
+            "value": "form input[type=text]"
+          }
+        ],
+        "rationale": "Visible labels are user-facing contract; this screen has no test ids."
+      },
+      "value": "{{member_id}}",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": null,
+      "on_error": []
+    },
+    {
+      "index": 2,
+      "action": "click",
+      "target": {
+        "primary": {
+          "by": "text",
+          "value": "Search"
+        },
+        "fallbacks": [],
+        "rationale": "The submit button is identified by its caption."
+      },
+      "value": null,
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "text_equals",
+        "value": "Member Detail",
+        "children": null
+      },
+      "on_error": []
+    },
+    {
+      "index": 3,
+      "action": "read",
+      "target": {
+        "primary": {
+          "by": "structural",
+          "value": "//td[normalize-space()='Savings Balance']/following-sibling::td[1]//tr[td[normalize-space()='Available']]/td[2]"
+        },
+        "fallbacks": [],
+        "rationale": "Reached via the 'Savings Balance' row heading, then the nested 'Available' row."
+      },
+      "value": null,
+      "extract": "savings_balance",
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": null,
+      "on_error": []
+    }
+  ],
+  "success": {
+    "kind": "all_of",
+    "value": null,
+    "children": [
+      {
+        "kind": "url_matches",
+        "value": "/member",
+        "children": null
+      },
+      {
+        "kind": "text_equals",
+        "value": "Savings Balance",
+        "children": null
+      }
+    ]
+  },
+  "provenance": {
+    "goal": "Look up the member given as input and read their current savings balance",
+    "discovered_by": "stub",
+    "discovery_run_id": "discovery-20260911-165216",
+    "created_at": "2026-09-11T20:52:16.929503Z"
+  }
+}

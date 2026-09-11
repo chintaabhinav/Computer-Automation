@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "version": "1.0",
+  "capability_id": "open_sub_account",
+  "description": "Open a savings sub-account for the member given as input. Hand-authored (see scripts/author_sub_account_capability.py) to exercise the risky-action and escalation paths, which need a step with a real side effect.",
+  "target": {
+    "app_id": "nmcu-back-office",
+    "entry_url": "http://localhost:5001",
+    "surface_type": "legacy_web",
+    "tenant_id": null,
+    "app_version": null
+  },
+  "inputs": [
+    {
+      "name": "member_id",
+      "type": "string",
+      "required": true,
+      "description": "The member whose sub-account is being opened."
+    }
+  ],
+  "outputs": {
+    "outcome_values": [
+      "success",
+      "no_such_member"
+    ],
+    "fields": [
+      {
+        "name": "sub_account_number",
+        "type": "string",
+        "sensitive": true,
+        "description": "The newly opened sub-account number."
+      }
+    ]
+  },
+  "steps": [
+    {
+      "index": 0,
+      "action": "navigate",
+      "target": null,
+      "value": "http://localhost:5001/member?member_id={{member_id}}",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "text_equals",
+        "value": "Member Detail",
+        "children": null
+      },
+      "on_error": [
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "No such member",
+            "children": null
+          },
+          "bucket": "business_outcome",
+          "outcome": "no_such_member",
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "Your session has expired",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "action": "click",
+      "target": {
+        "primary": {
+          "by": "text",
+          "value": "Open Sub-Account"
+        },
+        "fallbacks": [],
+        "rationale": "The action button, by its caption; the only submit on the form."
+      },
+      "value": null,
+      "extract": null,
+      "risk": "risky",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "url_matches",
+        "value": "/confirm",
+        "children": null
+      },
+      "on_error": [
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "Your session has expired",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "System Notice",
+            "children": null
+          },
+          "bucket": "recoverable",
+          "outcome": null,
+          "action": "dismiss",
+          "recovery_target": {
+            "primary": {
+              "by": "text",
+              "value": "Continue"
+            },
+            "fallbacks": [
+              {
+                "by": "css",
+                "value": "input[value='Continue']"
+              }
+            ],
+            "rationale": "The interstitial's only button, by its visible caption."
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "action": "read",
+      "target": {
+        "primary": {
+          "by": "structural",
+          "value": "//td[normalize-space()='New Sub-Account Number']/following-sibling::td[1]"
+        },
+        "fallbacks": [],
+        "rationale": "Addressed through its row heading; the value has no label."
+      },
+      "value": null,
+      "extract": "sub_account_number",
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": null,
+      "on_error": []
+    }
+  ],
+  "success": {
+    "kind": "text_equals",
+    "value": "Sub-account opened successfully.",
+    "children": null
+  },
+  "provenance": {
+    "goal": "Open a savings sub-account for the member given as input.",
+    "discovered_by": "hand-authored",
+    "discovery_run_id": "n/a-hand-authored",
+    "created_at": "2026-09-11T20:40:35.120380Z"
+  }
+}

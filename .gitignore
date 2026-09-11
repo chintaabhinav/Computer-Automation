@@ -1,0 +1,31 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Browser artifacts (Playwright)
+.playwright/
+playwright-report/
+test-results/
+browser-profiles/
+*.har
+*.webm
+trace.zip
+*-trace.zip
+
+# Run outputs are committed on purpose: an evidence directory is the reviewable record of what
+# an automation actually did, and it is only safe to commit because everything written there
+# goes through src/evidence.py's redact() -- balances and identifiers are masked at the
+# persistence boundary, and the masking is lossy and one-way. Secrets live in .env, which stays
+# ignored below; nothing reads a key into an event or a summary.
+
+# OS
+.DS_Store

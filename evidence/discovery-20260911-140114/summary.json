@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260911-140114",
+  "started_at": "2026-09-11T18:01:14.928540+00:00",
+  "finished_at": "2026-09-11T18:02:09.392220+00:00",
+  "duration_s": 54.46,
+  "events": 11,
+  "kind": "discovery",
+  "goal": "Look up the member given as input and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "claude-haiku-4-5",
+  "stop_reason": "dead_end",
+  "outcome": "failed",
+  "steps": 6,
+  "iterations": 9,
+  "note": "you reported done but the success checkpoint did not hold",
+  "artifact": null,
+  "fallbacks_promoted": 0,
+  "token_usage": {
+    "requests": 9,
+    "input_tokens": 15104,
+    "output_tokens": 1920,
+    "estimated_cost_usd": 0.024704
+  }
+}

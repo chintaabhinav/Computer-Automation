@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260911-132729",
+  "started_at": "2026-09-11T17:27:29.855438+00:00",
+  "finished_at": "2026-09-11T17:27:49.812962+00:00",
+  "duration_s": 19.96,
+  "events": 9,
+  "kind": "discovery",
+  "goal": "Look up member 1***5 and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "claude-haiku-4-5",
+  "stop_reason": "dead_end",
+  "outcome": "failed",
+  "steps": 5,
+  "iterations": 7,
+  "note": "2 consecutive failed attempts; last: no element matched css=\"[name='Available']\" (or any fallback); the element may be absent, hidden, or matched more than once",
+  "artifact": null,
+  "fallbacks_promoted": 1,
+  "token_usage": {
+    "requests": 7,
+    "input_tokens": 7891,
+    "output_tokens": 1530,
+    "estimated_cost_usd": 0.015541
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "schema_version": "1.0",
+  "version": "1.1",
+  "capability_id": "look_up_the_member_given_as_input_and_read_their",
+  "description": "Look up the member given as input and read their current savings balance. Error rules were authored post-discovery (see scripts/author_error_rules.py): the discovery run walked only the success path, so the handling of no-such-member, maintenance interstitials, slow responses, expired sessions and server errors was added by review against the conditions this application is known to produce.",
+  "target": {
+    "app_id": "localhost",
+    "entry_url": "http://localhost:5001",
+    "surface_type": "legacy_web",
+    "tenant_id": null,
+    "app_version": null
+  },
+  "inputs": [
+    {
+      "name": "member_id",
+      "type": "string",
+      "required": true,
+      "description": "Bound into steps that reference {{member_id}}."
+    }
+  ],
+  "outputs": {
+    "outcome_values": [
+      "success",
+      "no_such_member"
+    ],
+    "fields": [
+      {
+        "name": "current_savings_balance",
+        "type": "string",
+        "sensitive": false,
+        "description": "Read from the page during discovery as 'current_savings_balance'."
+      }
+    ]
+  },
+  "steps": [
+    {
+      "index": 0,
+      "action": "navigate",
+      "target": null,
+      "value": "http://localhost:5001",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "url_matches",
+        "value": "localhost:5001",
+        "children": null
+      },
+      "on_error": [
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "Your session has expired",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "HTTP 500 - Internal Server Error",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "action": "type",
+      "target": {
+        "primary": {
+          "by": "label",
+          "value": "Member ID"
+        },
+        "fallbacks": [
+          {
+            "by": "css",
+            "value": "input[name='Member ID']"
+          }
+        ],
+        "rationale": "The label 'Member ID' directly identifies the input field and will remain stable even if the application changes; the field name attribute is also durable."
+      },
+      "value": "{{member_id}}",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": null,
+      "on_error": [
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "Your session has expired",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "HTTP 500 - Internal Server Error",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "action": "click",
+      "target": {
+        "primary": {
+          "by": "text",
+          "value": "Search"
+        },
+        "fallbacks": [
+          {
+            "by": "role",
+            "value": "button"
+          }
+        ],
+        "rationale": "The Search button is labeled with visible text 'Search' which is durable. If the text changes, the role 'button' near the Member ID field will still be the submission button for this form."
+      },
+      "value": null,
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "any_of",
+        "value": null,
+        "children": [
+          {
+            "kind": "url_matches",
+            "value": "/member",
+            "children": null
+          },
+          {
+            "kind": "text_equals",
+            "value": "Member Detail",
+            "children": null
+          }
+        ]
+      },
+      "on_error": [
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "No such member",
+            "children": null
+          },
+          "bucket": "business_outcome",
+          "outcome": "no_such_member",
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "Your session has expired",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "HTTP 500 - Internal Server Error",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "System Notice",
+            "children": null
+          },
+          "bucket": "recoverable",
+          "outcome": null,
+          "action": "dismiss",
+          "recovery_target": {
+            "primary": {
+              "by": "text",
+              "value": "Continue"
+            },
+            "fallbacks": [
+              {
+                "by": "css",
+                "value": "input[value='Continue']"
+              }
+            ],
+            "rationale": "The interstitial's only button, identified by its visible caption; the value-based CSS selector is the backstop if the overlay markup changes around it."
+          }
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "Member Inquiry",
+            "children": null
+          },
+          "bucket": "recoverable",
+          "outcome": null,
+          "action": "wait",
+          "recovery_target": null
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "action": "read",
+      "target": {
+        "primary": {
+          "by": "structural",
+          "value": "//td[normalize-space()='Available']/following-sibling::td[1]"
+        },
+        "fallbacks": [
+          {
+            "by": "structural",
+            "value": "//td[normalize-space()='Savings Balance']/following-sibling::td[1]//td[normalize-space()='Available']/following-sibling::td[1]"
+          }
+        ],
+        "rationale": "The 'Available' balance appears in the Savings Balance section. Using the row heading 'Available' and selecting its following sibling cell will durably locate the balance amount, independent of any UI changes to styling or layout, as long as the table structure remains."
+      },
+      "value": null,
+      "extract": "current_savings_balance",
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "element_exists",
+        "value": "//td[normalize-space()='Available']/following-sibling::td[1]",
+        "children": null
+      },
+      "on_error": [
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "No such member",
+            "children": null
+          },
+          "bucket": "business_outcome",
+          "outcome": "no_such_member",
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "Your session has expired",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "HTTP 500 - Internal Server Error",
+            "children": null
+          },
+          "bucket": "hard_failure",
+          "outcome": null,
+          "action": null,
+          "recovery_target": null
+        },
+        {
+          "detect": {
+            "kind": "text_equals",
+            "value": "System Notice",
+            "children": null
+          },
+          "bucket": "recoverable",
+          "outcome": null,
+          "action": "dismiss",
+          "recovery_target": {
+            "primary": {
+              "by": "text",
+              "value": "Continue"
+            },
+            "fallbacks": [
+              {
+                "by": "css",
+                "value": "input[value='Continue']"
+              }
+            ],
+            "rationale": "The interstitial's only button, identified by its visible caption; the value-based CSS selector is the backstop if the overlay markup changes around it."
+          }
+        }
+      ]
+    }
+  ],
+  "success": {
+    "kind": "text_equals",
+    "value": "Savings Balance",
+    "children": null
+  },
+  "provenance": {
+    "goal": "Look up the member given as input and read their current savings balance",
+    "discovered_by": "claude-haiku-4-5",
+    "discovery_run_id": "discovery-20260911-142524",
+    "created_at": "2026-09-11T18:25:37.265289Z"
+  }
+}

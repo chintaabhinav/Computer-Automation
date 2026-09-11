@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260911-134312",
+  "started_at": "2026-09-11T17:43:12.103463+00:00",
+  "finished_at": "2026-09-11T17:43:39.531486+00:00",
+  "duration_s": 27.43,
+  "events": 10,
+  "kind": "discovery",
+  "goal": "Look up member 1***5 and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "claude-haiku-4-5",
+  "stop_reason": "dead_end",
+  "outcome": "failed",
+  "steps": 5,
+  "iterations": 8,
+  "note": "2 consecutive failed attempts; last: no element matched structural=\"//cell[@name='Available']/following-sibling::cell[1]\" (or any fallback); the element may be absent, hidden, or matched more than once",
+  "artifact": null,
+  "fallbacks_promoted": 2,
+  "token_usage": {
+    "requests": 8,
+    "input_tokens": 9177,
+    "output_tokens": 2134,
+    "estimated_cost_usd": 0.019847
+  }
+}

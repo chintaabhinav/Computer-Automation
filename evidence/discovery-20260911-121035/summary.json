@@ -1,0 +1,24 @@
+{
+  "run_id": "discovery-20260911-121035",
+  "started_at": "2026-09-11T16:10:35.028017+00:00",
+  "finished_at": "2026-09-11T16:11:06.209828+00:00",
+  "duration_s": 31.18,
+  "events": 5,
+  "kind": "discovery",
+  "goal": "Look up member 1***5 and read their current savings balance",
+  "url": "http://localhost:5001",
+  "model": "claude-haiku-4-5",
+  "stop_reason": "dead_end",
+  "outcome": "failed",
+  "steps": 1,
+  "iterations": 3,
+  "note": "2 consecutive failed attempts; last: the action ran but its checkpoint (element_exists=\"textbox with name='Member ID' in focused state\") did not hold afterwards",
+  "artifact": null,
+  "fallbacks_promoted": 0,
+  "token_usage": {
+    "requests": 4,
+    "input_tokens": 3382,
+    "output_tokens": 746,
+    "estimated_cost_usd": 0.007112
+  }
+}

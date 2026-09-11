@@ -1,0 +1,46 @@
+# Policy for the bundled mock bank target.
+#
+# Deliberately narrow: this permits exactly the one local application this project drives and
+# exactly the action types it uses. Widening it is an operational decision, and it should look
+# like one in a diff.
+#
+# Loaded by src/safety/policy.py and enforced by src/safety/guard.py on every navigation,
+# click, keystroke and read.
+
+# Matched against the FULL url. A pattern prefixed with "re:" is a regular expression;
+# anything else is a glob.
+#
+# An anchored regex rather than the more readable glob "http://localhost:5001*" on purpose:
+# that glob also matches http://localhost:5001.evil.example/, because a glob star does not stop
+# at a host boundary. An allowlist with a hole in it is worse than no allowlist, because it
+# invites trust.
+#
+# The optional tail accepts "/" or "?" so a URL carrying only a query string --
+# http://localhost:5001?inject=slow, which is what --inject produces -- is matched. Requiring a
+# path segment silently refused every injected-error scenario through the guarded CLI: the
+# allowlist is about the host, and "?" after the port is as legitimate as "/". The anchoring
+# that matters still rejects http://localhost:5001.evil.example/ and http://localhost:50011/.
+allowed_url_patterns:
+  - "re:^http://(localhost|127\\.0\\.0\\.1):5001([/?][^\\s]*)?$"
+
+# Every primitive this project actually uses, and nothing else. A new action type added to the
+# system later is denied here until someone adds it deliberately.
+allowed_actions:
+  - navigate
+  - click
+  - type
+  - read
+  - wait
+  - dismiss
+
+# What to do with a step that declares a side effect on the target system -- opening an account,
+# submitting a transaction. BLOCK is the default because this system is expected to run
+# unattended: a run that can move money without having been told it may is exactly the failure
+# this layer exists to prevent. Set to "confirm" to route such steps to a human callback, or
+# "flag" for observation runs where nothing is at stake.
+risky_action_mode: block
+
+# Action types that always require confirmation regardless of the risk a recording declares,
+# for cases where the action itself is the hazard. Empty here: the mock app's only stateful
+# action is already recorded as risky.
+require_confirmation_for: []

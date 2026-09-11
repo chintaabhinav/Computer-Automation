@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.0",
+  "version": "1.0",
+  "capability_id": "look_up_the_member_given_as_input_and_read_their",
+  "description": "Look up the member given as input and read their current savings balance",
+  "target": {
+    "app_id": "localhost",
+    "entry_url": "http://localhost:5001",
+    "surface_type": "legacy_web",
+    "tenant_id": null,
+    "app_version": null
+  },
+  "inputs": [
+    {
+      "name": "member_id",
+      "type": "string",
+      "required": true,
+      "description": "Bound into steps that reference {{member_id}}."
+    }
+  ],
+  "outputs": {
+    "outcome_values": [
+      "success"
+    ],
+    "fields": [
+      {
+        "name": "savings_balance",
+        "type": "string",
+        "sensitive": false,
+        "description": "Read from the page during discovery as 'savings_balance'."
+      }
+    ]
+  },
+  "steps": [
+    {
+      "index": 0,
+      "action": "navigate",
+      "target": null,
+      "value": "http://localhost:5001",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "url_matches",
+        "value": "localhost:5001",
+        "children": null
+      },
+      "on_error": []
+    },
+    {
+      "index": 1,
+      "action": "type",
+      "target": {
+        "primary": {
+          "by": "label",
+          "value": "Member ID"
+        },
+        "fallbacks": [
+          {
+            "by": "css",
+            "value": "input[name='Member ID']"
+          }
+        ],
+        "rationale": "The label 'Member ID' is visible and directly associated with the textbox. If the application changes, the name attribute on the input element provides a durable fallback."
+      },
+      "value": "{{member_id}}",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": null,
+      "on_error": []
+    },
+    {
+      "index": 2,
+      "action": "type",
+      "target": {
+        "primary": {
+          "by": "label",
+          "value": "Member ID"
+        },
+        "fallbacks": [
+          {
+            "by": "css",
+            "value": "input[name='Member ID']"
+          }
+        ],
+        "rationale": "The label 'Member ID' is visible and directly associated with the textbox. The fallback uses the name attribute which is stable across UI changes."
+      },
+      "value": "{{member_id}}",
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": null,
+      "on_error": []
+    },
+    {
+      "index": 3,
+      "action": "click",
+      "target": {
+        "primary": {
+          "by": "text",
+          "value": "Search"
+        },
+        "fallbacks": [
+          {
+            "by": "role",
+            "value": "button"
+          }
+        ],
+        "rationale": "The Search button is clearly labeled with visible text 'Search'. Using text is durable since this is a standard action button that won't change. The role fallback (button) catches it by semantic meaning if the text changes."
+      },
+      "value": null,
+      "extract": null,
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": {
+        "kind": "url_matches",
+        "value": "/member",
+        "children": null
+      },
+      "on_error": []
+    },
+    {
+      "index": 4,
+      "action": "read",
+      "target": {
+        "primary": {
+          "by": "structural",
+          "value": "//td[normalize-space()='Savings Balance']/following-sibling::td[1]//td[normalize-space()='Available']/following-sibling::td[1]"
+        },
+        "fallbacks": [
+          {
+            "by": "text",
+            "value": "$4,200.00"
+          }
+        ],
+        "rationale": "The savings balance is in a nested structure under 'Savings Balance' with 'Available' as a sub-heading. The structural path navigates to the Available balance value. Text matching works as fallback since $4,200.00 appears once on the page in this context."
+      },
+      "value": null,
+      "extract": "savings_balance",
+      "risk": "safe",
+      "wait": {
+        "until": null,
+        "timeout_s": 10.0,
+        "poll_ms": 250
+      },
+      "checkpoint": null,
+      "on_error": []
+    }
+  ],
+  "success": {
+    "kind": "text_equals",
+    "value": "$4,200.00",
+    "children": null
+  },
+  "provenance": {
+    "goal": "Look up the member given as input and read their current savings balance",
+    "discovered_by": "claude-haiku-4-5",
+    "discovery_run_id": "discovery-20260911-135047",
+    "created_at": "2026-09-11T17:51:02.111760Z"
+  }
+}
